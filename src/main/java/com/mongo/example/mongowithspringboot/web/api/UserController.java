@@ -5,9 +5,12 @@ import com.mongo.example.mongowithspringboot.service.dto.UserDto;
 import com.mongo.example.mongowithspringboot.web.model.UserCreateModel;
 import com.mongo.example.mongowithspringboot.web.model.UserModel;
 import com.mongo.example.mongowithspringboot.web.model.UserUpdateModel;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.time.LocalDate;
 import java.util.List;
-import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/users")
+@Api(value="userLocations", description="operations with users")
 public class UserController {
 
   private UserService userService;
@@ -33,6 +37,7 @@ public class UserController {
    *will show all users
 
    */
+  @ApiOperation(value = "View a list of Users", response = ResponseEntity.class)
   @GetMapping
   public ResponseEntity getAllUsers() {
     List<UserDto> allUsers = userService.getAllUsers();
@@ -78,6 +83,14 @@ public class UserController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
+  @ApiOperation(value = "View Users with specified location", response = ResponseEntity.class)
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Successfully retrieved list"),
+      @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+      @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+      @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+  }
+  )
   @GetMapping(value = "/{location}")
   public ResponseEntity findUsersByLocation(@PathVariable String location) {
     List<UserDto> usersByLocations = userService.getUsersByLocation(location);

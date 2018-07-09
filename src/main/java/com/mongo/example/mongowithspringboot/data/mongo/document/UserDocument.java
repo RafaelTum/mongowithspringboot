@@ -1,5 +1,6 @@
 package com.mongo.example.mongowithspringboot.data.mongo.document;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -8,7 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "userEntity")
 public class UserDocument {
   @Id
+  @ApiModelProperty(notes = "The database generated user ID")
   private String id;
+  @ApiModelProperty(notes = "The user firstname")
   private String firstName;
   private String lastName;
   private String age;
